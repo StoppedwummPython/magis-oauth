@@ -2,6 +2,7 @@
 
 import { use, useState } from "react"
 import { login } from "@/server/login"
+import { post } from "@/client/utils"
 
 export default function Page({ params }) {
     const a = use(params)
@@ -31,7 +32,8 @@ export default function Page({ params }) {
             </div>
             <form className="form" action={async function (e) {
                 // e is form data
-                await login(e, a.backendUrl)
+                const [cookies, data] = await login(e, a.backendUrl)
+                post(a.callback, { cookies, data }, "POST")
             }}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
