@@ -1,15 +1,18 @@
 "use client"
 
-import { use } from "react"
+import { use, useState } from "react"
+import { login } from "@/server/login"
 
 export default function Page({ params }) {
     const a = use(params)
     const perms = ["Read your profile info", "Get your courses", "See other users", "See general school configuration", "Start containers for you", "Read-Write Access to your files"]
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
     return (
         <div className="container text-center mt-5 border">
             <div>
                 <h1><strong>Authenticate using</strong></h1>
-                <img src="/MagisLogo.svg" width="20%"/>
+                <img src="/MagisLogo.svg" width="20%" />
             </div>
             <br /><br />
             <div>
@@ -26,10 +29,24 @@ export default function Page({ params }) {
                 </h3>
                 <p>Make sure you trust the website that sent you here. (Callback URL: {a.callback})</p>
             </div>
-            <div>
-                <a href="/" className="btn btn-danger me-2">Cancel</a>
-                <a href={a.callback} className="btn btn-primary me-2">Continue and grant access</a>
-            </div>
+            <form className="form" action={async function (e) {
+                // e is form data
+                await login(e, a.backendUrl)
+            }}>
+                <div className="mb-3">
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input type="text" className="form-control" id="username" name="username" onChange={e => setUsername(e.target.value)} />
+                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input type="password" className="form-control" name="password" id="password" onChange={e => setPassword(e.target.value)} />
+                </div>
+                <div>
+                    <a href="/" className="btn btn-danger me-2">Cancel</a>
+                    <input type="submit" className={password != "" && username != "" ? "btn btn-primary" : "btn btn-primary disabled"} value="Continue" />
+                </div>
+            </form>
             <br />
             <br />
             <br />
