@@ -3,12 +3,14 @@
 import { use, useState } from "react"
 import { login } from "@/server/login"
 import { post } from "@/client/utils"
+import { useSearchParams } from 'next/navigation'
 
 export default function Page({ params }) {
     const a = use(params)
     const perms = ["Read your profile info", "Get your courses", "See other users", "See general school configuration", "Start containers for you", "Read-Write Access to your files"]
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const sp = useSearchParams()
     return (
         <div className="container text-center mt-5 border">
             <div>
@@ -28,12 +30,12 @@ export default function Page({ params }) {
                 <h3>
                     Before clicking continue
                 </h3>
-                <p>Make sure you trust the website that sent you here. (Callback URL: {a.callback})</p>
+                <p>Make sure you trust the website that sent you here. (Callback URL: {sp.get("callback")})</p>
             </div>
             <form className="form" action={async function (e) {
                 // e is form data
                 const [cookies, data] = await login(e, a.backendUrl)
-                let mutatedUrl = a.callback
+                let mutatedUrl = sp.get("callback")
                 if (!mutatedUrl.startsWith("http://") && !mutatedUrl.startsWith("https://")) {
                     mutatedUrl = "https://" + mutatedUrl
                 }
