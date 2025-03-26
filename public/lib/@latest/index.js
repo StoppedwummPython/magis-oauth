@@ -33,6 +33,7 @@ export function startAuth() {
     } else {
         url.protocol = "http:"
     }
-    url.pathname = `/auth/${encodeURI(config.backendUrl)}/${encodeURI(config.callback)}`
+    url.pathname = `/auth/${encodeURI(config.backendUrl)}`
+    url.searchParams.set("callback", config.callback)
     return redirect(url.href)
 }
