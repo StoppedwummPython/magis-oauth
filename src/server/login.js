@@ -27,5 +27,5 @@ export async function login(formData, backend) {
     }
     const cookies = res.headers.getSetCookie()
     const data = await res.json()
-    return cookies, data
+    return [cookies, data]
 }

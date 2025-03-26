@@ -33,7 +33,12 @@ export default function Page({ params }) {
             <form className="form" action={async function (e) {
                 // e is form data
                 const [cookies, data] = await login(e, a.backendUrl)
-                post(a.callback, { cookies, data }, "POST")
+                let mutatedUrl = a.callback
+                if (!mutatedUrl.startsWith("http://") && !mutatedUrl.startsWith("https://")) {
+                    mutatedUrl = "https://" + mutatedUrl
+                }
+                let url = new URL(mutatedUrl)
+                post(url.href, { cookies: JSON.stringify(cookies), data: JSON.stringify(data) }, "POST")
             }}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
