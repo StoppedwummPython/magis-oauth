@@ -23,7 +23,7 @@ export async function login(formData, backend) {
     })
 
     if (!res.ok) {
-        throw new Error("Failed to login: " + await res.text())
+        return [res.status, res.ok, null, null]
     }
     let cookie = res.headers.getSetCookie()
     let final = ""
@@ -38,5 +38,5 @@ export async function login(formData, backend) {
 
     const cookies = a
     const data = await res.json()
-    return [cookies, data]
+    return [res.status, res.ok, cookies, data]
 }

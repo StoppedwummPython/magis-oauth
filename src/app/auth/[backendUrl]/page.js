@@ -34,7 +34,15 @@ export default function Page({ params }) {
             </div>
             <form className="form" action={async function (e) {
                 // e is form data
-                const [cookies, data] = await login(e, a.backendUrl)
+                const [status, ok, cookies, data] = await login(e, a.backendUrl)
+                if (!ok) {
+                    if (status === 401) {
+                        alert("Wrong username or password")
+                    } else {
+                        alert("Failed to login: " + status)
+                    }
+                    return
+                }
                 let mutatedUrl = sp.get("callback")
                 if (!mutatedUrl.startsWith("http://") && !mutatedUrl.startsWith("https://")) {
                     mutatedUrl = "https://" + mutatedUrl
