@@ -1,5 +1,5 @@
 "use server"
-
+import * as ck from 'cookie'
 export async function login(formData, backend) {
     /** @type {string} */
     let mutatedUrl = backend
@@ -25,7 +25,18 @@ export async function login(formData, backend) {
     if (!res.ok) {
         throw new Error("Failed to login: " + await res.text())
     }
-    const cookies = res.headers.getSetCookie()
+    let cookie = res.headers.getSetCookie()
+    let final = ""
+    cookie.forEach(c => {
+        final = final + c + ";"
+    })
+    let a = {}
+
+    a["sessionToken"] = ck.parse(final).sessionToken
+    a["authKey"] = ck.parse(final).authKey
+    console.log(a)
+
+    const cookies = a
     const data = await res.json()
     return [cookies, data]
 }
