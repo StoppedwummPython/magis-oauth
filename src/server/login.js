@@ -34,7 +34,6 @@ export async function login(formData, backend) {
 
     a["sessionToken"] = ck.parse(final).sessionToken
     a["authKey"] = ck.parse(final).authKey
-    console.log(a)
 
     const cookies = a
     const data = await res.json()
